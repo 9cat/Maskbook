@@ -62,6 +62,7 @@
     "@msgpack/msgpack": "^1.12.2",
     "@openzeppelin/contracts": "^3.2.0",
     "@servie/events": "^1.0.0",
+    "@transak/transak-sdk": "^1.0.25",
     "@types/bip39": "^3.0.0",
     "@types/classnames": "^2.2.10",
     "@types/d3": "^5.7.2",

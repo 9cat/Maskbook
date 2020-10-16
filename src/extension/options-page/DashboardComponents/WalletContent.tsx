@@ -23,9 +23,9 @@ import { useColorStyles } from '../../../utils/theme'
 import Services from '../../service'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'
 import type { WalletRecord } from '../../../plugins/Wallet/database/types'
-import { ChainId, ProviderType, TokenDetailed } from '../../../web3/types'
-import { EthereumChainChip } from '../../../web3/UI/EthereumChainChip'
-import { useChainId } from '../../../web3/hooks/useChainState'
+import { ProviderType, TokenDetailed } from '../../../web3/types'
+import { useRemoteControlledDialog } from '../../../utils/hooks/useRemoteControlledDialog'
+import { TransakMessageCenter } from '../../../plugins/Transak/messages'
 
 const walletContentTheme = (theme: Theme): Theme =>
     merge(cloneDeep(theme), {
@@ -124,7 +124,9 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
         </MenuItem>,
     )
 
-    const chainId = useChainId(wallet.address)
+    //#region remote controlled buy dialog
+    const [, setBuyDialogOpen] = useRemoteControlledDialog(TransakMessageCenter, 'buyTokenDialogUpdated')
+    //#endregion
 
     return (
         <div className={classes.root} ref={ref}>
@@ -172,7 +174,7 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
                 </List>
             </ThemeProvider>
             {!xsMatched ? (
-                <Box className={classes.footer} display="flex" alignItems="center" justifyContent="space-between">
+                <Box className={classes.footer} display="flex" alignItems="center">
                     <Button
                         onClick={() =>
                             openWalletHistory({
@@ -188,6 +190,14 @@ export const WalletContent = React.forwardRef<HTMLDivElement, WalletContentProps
                         startIcon={<HistoryIcon />}
                         variant="text">
                         {t('activity')}
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            setBuyDialogOpen({
+                                open: true,
+                            })
+                        }}>
+                        {t('buy_now')}
                     </Button>
                 </Box>
             ) : null}
